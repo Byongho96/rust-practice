@@ -1,4 +1,4 @@
-use std::io::{self, BufRead};
+use std::io::stdin;
 
 fn solution(n: usize, m: usize, arr: Vec<Vec<u32>>) -> u32 {
     let mut mx = 0;
@@ -31,30 +31,27 @@ fn solution(n: usize, m: usize, arr: Vec<Vec<u32>>) -> u32 {
 }
 
 fn main() {
-    let stdin = io::stdin();
-    let mut lines = stdin.lock().lines().map(|l| l.unwrap());
+    let mut buffer = String::new();
+    stdin().read_line(&mut buffer).unwrap();
 
-    let nm: Vec<usize> = lines
-        .next()
-        .unwrap()
-        .split_whitespace()
-        .map(|s| s.parse().unwrap())
-        .collect();
-    let n = nm[0];
-    let m = nm[1];
+    let mut nm = buffer.split_ascii_whitespace().flat_map(str::parse::<usize>);
+    let n = nm.next().unwrap();
+    let m = nm.next().unwrap();
 
     let arr: Vec<Vec<u32>> = (0..n)
-        .map(|_| {
-            lines
-                .next()
-                .unwrap()
-                .trim()
-                .chars()
-                .map(|c| c.to_digit(10).unwrap())
-                .collect()
-        })
-        .collect();
+    .map(|_| {
+        buffer.clear();
+        stdin()
+            .read_line(&mut buffer)
+            .expect("Failed to read line");
+        buffer
+            .trim()
+            .chars()
+            .map(|c| c.to_digit(10).unwrap())
+            .collect()
+    })
+    .collect();
 
     let answer = solution(n, m, arr);
-    println!("{}", answer);
+    println!("{answer}");
 }
